@@ -7,7 +7,7 @@
               <ul class="a-unordered-list a-horizontal a-size-small">
                   <li>
                       <span class="a-list-item">
-                          <a href="#" class="a-link-normal a-color-tertiary">{{product.category.type}}</a>
+                          <a href="#" class="a-link-normal a-color-tertiary">{{product.category.type || 'categoria'}}</a>
                       </span>
                   </li> 
                   <li>
@@ -51,7 +51,7 @@
                                        <!-- Author's Name -->
                                        <div class="col-xl-4 col-lg-3 col-md-3 col-sm-3 col-3">
                                            <div class="authorNameCol">
-                                               <a href="" class="">{{product.owner.name}}</a>
+                                               <a href="" class="">{{product.owner.name  || ' '}}</a>
                                            </div>
                                        </div>
                                         <!-- Author's Button -->
@@ -90,7 +90,20 @@
                                   (Author)
                               </a>
                           </div>
-                          <div class="reviewGroup"></div>
+                          <div class="reviewGroup">
+                               <no-ssr>
+                              <star-rating :rating="product.averageRating"
+                               :show-rating="false"
+                               :glow="1"
+                               :border-width="1"
+                               :rounded-corners="true"
+                               :read-only="true"
+                               :star-sizes="14"
+                               :star-points="[23,2,14,17,0,19,10,34,7,50,23,43,38,50,36,34,46,19,31,17]">
+                               
+                                 </star-rating>
+                            </no-ssr>
+                          </div>
                           <hr style="margin-top: 10px;">
                           <!-- A tags Dummy Data -->
                           <div class="mediaMatrix">
@@ -235,7 +248,7 @@
                                 </div>
 
                                 <div class="a-section">
-                                    <div class="a-button-stack">
+                                    <div class="a-button-stack" @click="addProductToCart(product)">
                                         <span class="a-spacing-small a-button-primary a-button-icon">
                                             <span class="a-button-inner">
                                                 <i class="a-icon a-icon-cart"></i>
@@ -336,25 +349,45 @@
                         </div>
                     </div>
                 </div>
-
+               <ReviewSection :product='product' :reviews="reviews"></ReviewSection>
           </div>
       </div>
   </main>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import ReviewSection from '~/components/ReviewSection';
+import StarRating from 'vue-star-rating';
+components: {
+    ReviewSection,
+    StarRating
+}
+
 export default {
+    
     async asyncData({ $axios, params }){
         try {
-            let response = await $axios.$get(`http://localhost:3030/api/products/${params.id}`);
-            console.log(response);
+            let singleProduct = await $axios.$get(`http://localhost:3030/api/products/${params.id}`);
+            let manyReviews = await $axios.$get(`http://localhost:3030/api/review/${params.id}`);
+
+            const [productResponse, reviewsResponse] = await Promise.all([
+                singleProduct, manyReviews
+            ]);
+            console.log(singleProduct);
 
             return {
-                product: response.product
+                product: productResponse.product,
+                reviews: reviewsResponse.reviews
             }
+
+          
        } catch (err){
             console.log(err);
         }
+    },
+    methods: {
+        ...mapActions(["addProductToCart"])
     }
 }
 </script>

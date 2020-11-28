@@ -1,5 +1,6 @@
 //const URL = 'http://localhost:3030'
 export default {
+  mode: 'universal',
   server: {
     port: 3001, // default: 3000
     host: '0.0.0.0' // default: localhost
@@ -24,7 +25,8 @@ export default {
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [
+  plugins: [{ src: "~/plugins/localStorage.js", ssr:false}
+
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -42,14 +44,35 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/auth'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-   
+   proxy: true,
   },
 
+  proxy: {
+    "/api": 'http://localhost:3030'
+  },
+
+  
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
+
+    extend(config, ctx){}
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            propertyName: "token"
+          },
+          logout: true
+        }
+      }
+    }
   }
 }
