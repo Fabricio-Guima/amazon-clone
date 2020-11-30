@@ -34,10 +34,10 @@
               <h2>Update address</h2>
               <div class="a-section a-spacing-none a-spacing-top-small">
                 <b>
-                  Or pick up your packages at your convenience from our
-                  self-service locations. To add an Amazon Pickup Point or
-                  Locker, click
-                  <a href="#">here</a>.
+                  Or pick up your packages at your convenience from our self-service locations. To add an Amazon Pickup Point or Locker, click
+                  <a
+                    href="#"
+                  >here</a>.
                 </b>
               </div>
               <!-- Error Message -->
@@ -50,27 +50,13 @@
                   <div class="a-spacing-top-medium">
                     <label style="margin-bottom: 0px;">Country/Region</label>
                     <select class="a-select-option" v-model="country">
-                      <option disabled value="">Escolha um país</option>
-                      <option
-                        v-for="country in countries"
-                        :key="country.alpha2Code"
-                        :value="country.name"
-                        >{{ country.name }}</option
-                      >
-                    </select>   
-                    {{country}}               
+                      <option v-for="country in countries" :key="country.alpha2Code" :value="country.name">{{country.name}}</option>
+                    </select>
                   </div>
                   <!-- Full name -->
                   <div class="a-spacing-top-medium">
                     <label style="margin-bottom: 0px;">Full Name</label>
-                    <input
-                      type="text"
-                      class="a-input-text"
-                      style="width: 100%;"
-                      :placeholder="address.fullName"
-                      v-model="fullName"
-                    />
-                    {{fullName}}
+                    <input type="text" class="a-input-text" style="width: 100%;" v-model="fullName" :placeholder="address.fullName"/>
                   </div>
                   <!-- Street Address -->
                   <div class="a-spacing-top-medium">
@@ -78,11 +64,11 @@
                     <input
                       type="text"
                       class="a-input-text"
-                      style="width: 100%;"                     
+                      style="width: 100%;"
                       :placeholder="address.streetAddress"
                       v-model="streetAddress1"
+                      
                     />
-                    rua 1:{{streetAddress1}}
                     <!-- Street Address 2 -->
                     <input
                       type="text"
@@ -91,61 +77,28 @@
                       placeholder="Apartment, suite, unit, building, floor, etc."
                       v-model="streetAddress2"
                     />
-                    rua 2 :{{streetAddress2}}
                   </div>
                   <!-- City -->
                   <div class="a-spacing-top-medium">
                     <label style="margin-bottom: 0px;">City</label>
-                    <input
-                      type="text"
-                      class="a-input-text"
-                      style="width: 100%;"
-                       :placeholder="address.city"
-                      v-model="city"
-                    />
-                    {{city}}
+                    <input type="text" class="a-input-text" style="width: 100%;" v-model="city" :placeholder="address.city"/>
                   </div>
                   <!-- State -->
                   <div class="a-spacing-top-medium">
-                    <label style="margin-bottom: 0px;"
-                      >State / Province / Region</label
-                    >
-                    <input
-                      type="text"
-                      class="a-input-text"
-                      style="width: 100%;"
-                       :placeholder="address.state"
-                      v-model="state"
-                    />
-                    {{state}}
+                    <label style="margin-bottom: 0px;">State / Province / Region</label>
+                    <input type="text" class="a-input-text" style="width: 100%;" v-model="state" :placeholder="address.state"/>
                   </div>
                   <!-- Zip Code -->
                   <div class="a-spacing-top-medium">
                     <label style="margin-bottom: 0px;">Zip Code</label>
-                    <input
-                      type="text"
-                      class="a-input-text"
-                      style="width: 100%;"
-                       :placeholder="address.zipCode"
-                      v-model="zipCode"
-                    />
-                    {{zipCode}}
+                    <input type="text" class="a-input-text" style="width: 100%;" v-model="zipCode" :placeholder="address.zipCode"/>
                   </div>
                   <!-- Phone Number -->
                   <div class="a-spacing-top-medium">
                     <label style="margin-bottom: 0px;">Phone Number</label>
-                    <input
-                      type="text"
-                      class="a-input-text"
-                      style="width: 100%;"
-                       :placeholder="address.phoneNumber"
-                      v-model="phoneNumber"
-                    />
-                    phone: {{phoneNumber}}
+                    <input type="text" class="a-input-text" style="width: 100%;" v-model="phoneNumber" :placeholder="address.phoneNumber"/>
                     <div class="a-section a-spacing-none a-spacing-top-micro">
-                      <span class="a-size-mini"
-                        >May be used to assist delivery</span
-                      >
+                      <span class="a-size-mini">May be used to assist delivery</span>
                     </div>
                   </div>
                   <div class="a-spacing-base a-spacing-top-medium">
@@ -153,37 +106,25 @@
                   </div>
                   <!-- Delivery Instruction -->
                   <div class="a-spacing-top-medium">
-                    <label style="margin-bottom: 0px;"
-                      >Do we need additional instructions to find this
-                      address?</label
-                    >
-                    <textarea                     
-                      style="height:6em; width: 100%;"
+                    <label
+                      style="margin-bottom: 0px;"
+                    >Do we need additional instructions to find this address?</label>
+                    <textarea
                       :placeholder="address.deliverInstructions"
-                      v-model="deliverInstructions"
+                      style="height:6em; width: 100%;" v-model="deliverInstructions" 
                     ></textarea>
-                    {{deliverInstructions}}
                   </div>
                   <!-- Security code -->
                   <div class="a-spacing-top-medium">
-                    <label style="margin-bottom: 0px;"
-                      >Do we need a security code or a call box number to access
-                      this building?</label
-                    >
-                    <input
-                      type="text"
-                      class="a-input-text"
-                      style="width: 100%;"                     
-                       :placeholder="address.securityCode"
-                      v-model="securityCode"
-                    />
-                    {{securityCode}}
+                    <label
+                      style="margin-bottom: 0px;"
+                    >Do we need a security code or a call box number to access this building?</label>
+                    <input type="text" class="a-input-text" style="width: 100%;" v-model="securityCode" :placeholder="address.securityCode"/>
                   </div>
                   <div class="a-spacing-top-medium">
                     <label style="margin-bottom: 0px;">Weekend delivery</label>
                     <a href="#">
-                      <i class="fas fa-angle-down"></i> Which days can you
-                      receive packages?
+                      <i class="fas fa-angle-down"></i> Which days can you receive packages?
                     </a>
                   </div>
                   <div class="a-spacing-top-medium"></div>
@@ -194,10 +135,7 @@
                     </span>
                   </div>
                   <div>
-                    <span
-                      >If the address contains typos or other errors, your
-                      package may be undeliverable.</span
-                    >
+                    <span>If the address contains typos or other errors, your package may be undeliverable.</span>
                   </div>
                   <div class="a-spacing-top-small">
                     <span>
@@ -229,67 +167,64 @@
 </template>
 
 <script>
-export default { 
-   data() {
-    return {
-      country: "",
-      fullName: "",
-      streetAddress1: "",
-      streetAddress2: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      phoneNumber: "",
-      deliverInstructions: "",
-      securityCode: ""
-    };
-  },
-  async asyncData({ $axios, params }) {
-    try {
-      let response = await $axios.$get("http://localhost:3030/api/countries");
-      let singleAddress = $axios.$get(`http://localhost:3030/api/addresses/${params.id}`);
+export default {
+    async asyncData({$axios, params}) {
+        try {
+            let response = await $axios.$get('http://localhost:3030/api/countries');
+            let singleAddress = await $axios.$get('http://localhost:3030/api/addresses/'+ params.id);
 
-        let [countriesResponse, addressResponse] = await Promise.all([
-            response, singleAddress
-        ])
 
-     return {
-         countries:  countriesResponse,
-         address: addressResponse.address
-         }   
-       
-    } catch (err) {
-        console.log(err)
-    }
-  },
-  methods: {
-    async onUpdateAddress() {
-      try {
-        let data = new Object();
-        data.country = this.country;
-        data.fullName = this.fullName;
-        data.streetAddress = this.streetAddress1 + " " + this.streetAddress2;      
-        data.city = this.city;
-        data.state = this.state;
-        data.zipCode = this.zipCode;
-        data.phoneNumber = this.phoneNumber;
-        data.deliverInstructions = this.deliverInstructions;
-        data.securityCode = this.securityCode;
-
-        let response = await this.$axios.$put(`http://localhost:3030/api/addresses/${this.$route.params.id}`, { data });
-
-        if (response.success) {
-          this.$router.push("/address");
+            console.log(singleAddress)
+            return{
+                countries: response,
+                address: singleAddress.addresses
+            }
+        } catch (error) {
+            console.log(error);
         }
-      } catch (err) {
-        res.status(500).json({
-          success: false,
-          message: err.message
-        });
-      }
     },
+    data() {
+        return {
+            country: "United States of America",
+            fullName: "",
+            streetAddress1: "",
+            streetAddress2: "",
+            city: "",
+            state: "",
+            deliverInstructions: "",
+            zipCode: "",
+            phoneNumber: "",
+            securityCode: "",
+        };
+    },
+    methods: {
+        async onUpdateAddress() {
+
+            try {
+                let data = {
+                    country: this.country,
+                    fullName: this.fullName,
+                    streetAddress: this.streetAddress1 + " " + this.streetAddress2,
+                    city: this.city,
+                    state: this.state,
+                    deliverInstructions: this.deliverInstructions,
+                    zipCode: this.zipCode,
+                    phoneNumber: this.phoneNumber,
+                    securityCode: this.securityCode,
+                };
+                let response = await this.$axios.$put("http://localhost:3030/api/addresses/api/addresses/"+ this.$route.params.id, {data});
+
+                if(response.success) {
+                    this.$router.push('/address');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+            
+
+            
+        }
+    }
    
-  },
- 
-};
+}
 </script>

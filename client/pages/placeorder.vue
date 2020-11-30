@@ -32,13 +32,13 @@
                       <div class="displayAddressDiv">
                         <!-- User's address -->
                         <ul class="displayAddressUL">
-                          <li>fullName</li>
-                          <li>streetAddress</li>
-                          <li>city</li>
-                          <li>country</li>
+                          <li>{{ $auth.$state.user.address.fullName }}</li>
+                          <li>{{ $auth.$state.user.address.streetAddress }}</li>
+                          <li>{{ $auth.$state.user.address.city }}</li>
+                          <li>{{ $auth.$state.user.address.country }} </li>
                           <li>
                             Phone:
-                            <span dir="ltr">phoneNumber</span>
+                            <span dir="ltr">{{ $auth.$state.user.address.phoneNumber }}</span>
                           </li>
                         </ul>
                       </div>
@@ -116,27 +116,27 @@
                 <!-- Estimated delivery -->
                 <div
                   class="a-row a-color-state a-text-bold a-size-medium a-spacing-small"
-                >Estimated delivery: 29 November 2019</div>
+                >Estimated delivery: {{ estimatedDelivery }}</div>
                 <div class="row">
                   <!-- Cart -->
                   <div class="col-xl-6 col-lg-7 col-sm-6 col-12">
-                    <div class="a-row a-spacing-base">
+                    <div class="a-row a-spacing-base" v-for="product in getCart" :key="product._id">
                       <div class="row">
                         <!-- Product's photo -->
                         <div class="col-sm-3 col-3">
-                          <img src style="width: 100px;" />
+                          <img src="/img/spcBody.jpg" style="width: 100px;" />
                         </div>
                         <!-- Product's Title -->
                         <div class="col-sm-9 col-9">
                           <div class="a-row">
-                            <strong>Product Title</strong>
+                            <strong>{{ product.title }}</strong>
                           </div>
                           <!-- Product's owner name -->
-                          <div class="a-row a-size-small">by product owner name</div>
+                          <div class="a-row a-size-small">{{ product.owner.name }}</div>
                           <div class="a-row">
                             <!-- Product's price -->
                             <span class="a-color-price a-spacing-micro">
-                              <strong dir="ltr">$30</strong>
+                              <strong dir="ltr">${{ product.price * product.quantity }}</strong>
                             </span>
                           </div>
                           <div class="a-row">
@@ -144,7 +144,7 @@
                           </div>
                           <div class="a-row">
                             <!-- Product's quantity -->
-                            <strong>Quantity: 213</strong>
+                            <strong>Quantity: {{ product.quantity }}</strong>
                           </div>
                           <div
                             class="a-row a-color-secondary a-size-small"
@@ -178,7 +178,7 @@
                         <!-- Delivery option -->
                         <div class="a-spacing-mini wednesday">
                           <!-- Shipping normal -->
-                          <input type="radio" name="order0" />
+                          <input type="radio" name="order0" @change="onChooseShiping('normal')" />
                           <span class="a-radio-label">
                             <span class="a-color-success">
                               <strong>Averages 7 business days</strong>
@@ -192,7 +192,7 @@
                         <br />
                         <div class="a-spacing-mini tuesday">
                           <!-- Shipping fast -->
-                          <input type="radio" name="order0" />
+                          <input type="radio" name="order0"  @change="onChooseShiping('fast')" />
                           <span class="a-radio-label">
                             <span class="a-color-success">
                               <strong>Averages 3 business days</strong>
@@ -243,12 +243,12 @@
                     <div class="row">
                       <!-- Cart's total price -->
                       <div class="col-sm-6">Items:</div>
-                      <div class="col-sm-6 text-right">USD $999</div>
+                      <div class="col-sm-6 text-right">USD ${{ getCartTotalPrice }}</div>
                     </div>
                     <div class="row">
                       <!-- Shipping cost -->
                       <div class="col-sm-6">Shipping & handling:</div>
-                      <div class="col-sm-6 text-right">USD 92</div>
+                      <div class="col-sm-6 text-right">USD {{ shippingPrice }}</div>
                     </div>
                     <div class="row mt-2">
                       <div class="col-sm-6"></div>
@@ -259,7 +259,7 @@
                     <!-- Total Price with Shipping -->
                     <div class="row">
                       <div class="col-sm-6">Total Before Tax:</div>
-                      <div class="col-sm-6 text-right">USD 300023</div>
+                      <div class="col-sm-6 text-right">USD {{ getCartTotalPriceWithShipping }}</div>
                     </div>
                     <div class="row">
                       <div class="col-sm-6">Estimated tax to be collected:</div>
@@ -272,7 +272,7 @@
                       </div>
                       <div class="col-sm-6 text-right">
                         <!-- Total Price with Shipping -->
-                        <div class="a-color-price a-size-medium a-text-bold">USD 300023</div>
+                        <div class="a-color-price a-size-medium a-text-bold">USD {{ getCartTotalPriceWithShipping }}</div>
                       </div>
                     </div>
                   </div>
@@ -358,7 +358,48 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
-  layout: "none"
+  layout: "none",
+  async asyncData({ $axios, store }) {
+    try {
+      let response = await $axios.$post('http://localhost:3030/api/shipment', {shipment: "normal"});
+
+      store.commit('setShipping', {
+      price: response.shipment.price, 
+      estimatedDelivery: response.shipment.estimated 
+      })
+
+      return {
+        shippingPrice: response.shipment.price,
+        estimatedDelivery: response.shipment.estimated
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  computed: {
+    ...mapGetters(["getCart", "getCartTotalPrice", "getCartTotalPriceWithShipping"])
+  },
+  methods: {
+    async onChooseShiping(shipment) {
+      try {
+      let response = await this.$axios.$post('http://localhost:3030/api/shipment', {shipment: shipment});
+
+      this.$store.commit('setShipping', {
+      price: response.shipment.price, 
+      estimatedDelivery: response.shipment.estimated 
+      })
+     
+        this.shippingPrice = response.shipment.price
+        this.estimatedDelivery = response.shipment.estimated
+     
+
+    } catch (err) {
+      console.log(err);
+    }
+    }
+  }
 };
 </script>

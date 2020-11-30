@@ -26,7 +26,7 @@
               <h1 class="a-spacing-medium a-spacing-top-medium">Your Addresses</h1>
               <!-- Message from Server -->
               <div class="a-section a-spacing-none a-spacing-top-small">
-                <b>{{ message }}</b>
+                <b>{{message}}</b>
               </div>
               <div class="a-spacing-double-large">
                 <div class="row a-spacing-micro">
@@ -54,29 +54,29 @@
                               <li>
                                 <h5>
                                   <!-- Address Fullname -->
-                                  <b>{{ address.fullName }}</b>
+                                  <b>{{address.fullName}}</b>
                                 </h5>
                               </li>
                               <!-- Address street address -->
-                              <li>{{ address.streetAddress }}</li>
+                              <li>{{address.street}}</li>
                               <!-- Address city state zip code -->
-                              <li>{{address.city}}, {{address.state}}, {{address.zipCode}}</li>
+                              <li>{{address.city}} , {{address.state}} , {{address.zipCode}}</li>
                               <!-- Address country -->
-                              <li>{{ address.country }}</li>
+                              <li>{{address.country}}</li>
                               <!-- Address Phone number -->
-                              <li>Phone Number:{{ address.phoneNumber }} </li>
+                              <li>Phone number: {{address.phoneNumber}}</li>
                             </ul>
                           </div>
                         </div>
                       </div>
-                      <!-- Update Button -->
+                      <!-- Delete Button -->
                       <div class="edit-address-desktop-link">
                         <nuxt-link :to="`/address/${address._id}`">Edit</nuxt-link>
                         &nbsp; | &nbsp;
                         <a href="#" @click="onDeleteAddress(address._id, index)">Delete</a>
                         &nbsp; | &nbsp;
                         <!-- Set Address as Default -->
-                        <a href="#" @click="onSetDefault(address._id)">Set as Default</a>
+                        <a href="#" @click="OnSetDefault(address._id)">Set as Default</a>
                       </div>
                     </div>
                   </div>
@@ -93,61 +93,53 @@
   <!--/MAIN-->
 </template>
 
+
 <script>
 export default {
-    data(){
-        return {
-            message: "",
-            addresses: ''
-        }
-    },
-    async asyncData({ $axios }){
+    async asyncData({ $axios}) {
         try {
-
             let response = await $axios.$get("http://localhost:3030/api/addresses");
 
             return {
                 addresses: response.addresses
             }
-
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    data() {
+        return {
+            message: ""
         }
     },
     methods: {
         async onDeleteAddress(id, index){
-            try {
-                let response = await this.$axios.$delete(`http://localhost:3030/api/addresses/${id}`);
+            try{
+                let response = await this.$axios.$delete('http://localhost:3030/api/addresses/'+ id);
 
-                if(response.success){
+                if(response.success) {
                     this.message = response.message;
                     this.addresses.splice(index, 1);
                 }
-
-            } catch (err) {
-                this.message = err.message;
-                console.log(err);
+            }
+            catch(error){
+                this.message = error.message;
+                console.log(error);
             }
         },
-        async onSetDefault(id){
+        async OnSetDefault (id) {
             try {
-                let response = await this.$axios.$put(`http://localhost:3030/api/addresses/set/default`, { id: id })
+                let response = await this.$axios.$put('http://localhost:3030/api/addresses/set/default', {id:id});
 
-                 if(response.success){
+                if(response.success) {
                     this.message = response.message;
-                   await this.$auth.fetchUser();
+                    await this.$auth.fetchUser();
                 }
-
-            } catch (err) {
-                 this.message = err.message;
-                 console.log(err);
-
+            } catch (error) {
+                this.message = error.message;
+                console.log(error);
             }
-
         }
     }
 }
 </script>
-
-
-

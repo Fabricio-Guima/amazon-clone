@@ -30,7 +30,7 @@
                     >Deliver to
                   </span>
                   <span class="nav-line-2" id="glow-ingress-line2"
-                    >{{$auth.$state.user.address.country}}
+                    >World
                   </span>
                 </div>
               </nuxt-link>
